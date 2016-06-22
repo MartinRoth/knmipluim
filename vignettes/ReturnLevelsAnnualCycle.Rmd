@@ -1,0 +1,44 @@
+---
+title: "Annual Cycle of return levels"
+author: "Martin Roth"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, LoadLibraries, echo=FALSE}
+library(data.table)
+library(ggplot2)
+library(knmipluim)
+```
+
+We want to compute the annual cycle of return levels of maximum (and minimum) daily temperature, using the following approach.
+
+1. We specify for each day of the year a window size, e.g. 15 days.
+2. For each of these windows we determine the maximum value, which is then related to that calendar day.
+3. With this we obtain for each day one maximum value per year of observations.
+4. From these maxima we compute the GEV parameters.
+5. The GEV parameters are smoothed over the year (in a cyclic way)
+6. The return levels are calculated based on these smoothed parameters.
+
+The data:
+```{r, data, echo=FALSE}
+txDat <- fread("http://climexp.knmi.nl/data/bxeca162.dat")
+setnames(txDat, c("year", "month", "day", "tx"))
+setkey(txDat, year, month, day)
+tnDat <- fread("http://climexp.knmi.nl/data/bneca162.dat")
+setnames(tnDat, c("year", "month", "day", "tn"))
+setkey(tnDat, year, month, day)
+data <- merge(txDat, tnDat)
+data <- data[year %in% 1981:2010]
+data[, date := as.Date(paste(year, month, day, sep="-"))]
+knitr::kable(rbind(head(data), tail(data)))
+```
+
+```{r, dataVis, echo=FALSE}
+ggplot(data, aes(x = date, y = tx)) + geom_smooth(col = 2, se = FALSE) +
+  geom_smooth(aes(y = tn), col = 4, se = FALSE)
+```

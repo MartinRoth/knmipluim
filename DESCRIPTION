@@ -6,3 +6,6 @@ Description: Compute moving return levels representing the annual cycle.
 Depends: R (>= 3.3.0)
 License: What license is it under?
 LazyData: true
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
