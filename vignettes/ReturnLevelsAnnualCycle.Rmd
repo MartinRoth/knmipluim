@@ -42,3 +42,14 @@ knitr::kable(rbind(head(data), tail(data)))
 ggplot(data, aes(x = date, y = tx)) + geom_smooth(col = 2, se = FALSE) +
   geom_smooth(aes(y = tn), col = 4, se = FALSE)
 ```
+
+```{r, movingExtremes}
+data[, rollMax := GetWindowExtremes(tx, 15L, "max")]
+data[, rollMin := GetWindowExtremes(tn, 15L, "min")]
+knitr::kable(data[1 : 40, ])
+```
+
+```{r, maximaGevParams}
+#maxGevParams <- data[, (GetGevParams(rollMax)), by = .(month, day)]
+#knitr::kable(maxGevParams[1:40,])
+```
