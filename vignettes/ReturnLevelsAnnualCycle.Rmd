@@ -50,6 +50,24 @@ knitr::kable(data[1 : 40, ])
 ```
 
 ```{r, maximaGevParams}
-#maxGevParams <- data[, (GetGevParams(rollMax)), by = .(month, day)]
-#knitr::kable(maxGevParams[1:40,])
+fixedShape <- -0.3
+maxGevParams <- data[, GetGevParamsFixedShape(rollMax, fixedShape), by = .(month, day)]
+
+summary(maxGevParams[, .(loc, scale)])
 ```
+
+```{r, plotGevParamsMaxima}
+plot(maxGevParams[, scale])
+```
+
+```{r, minimaGevParams}
+fixedShape <- -0.3
+gevParamsMinima <- data[, GetGevParams(-rollMin), by = .(month, day)]
+#gevParamsMinima <- data[, GetGevParamsFixedShape(rollMin, fixedShape), by = .(month, day)]
+knitr::kable(gevParamsMinima[1:40,])
+
+plot(gevParamsMinima[, shape])
+
+summary(gevParamsMinima[, .(loc, scale, shape)])
+```
+
