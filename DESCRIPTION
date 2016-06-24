@@ -9,12 +9,14 @@ Imports:
     caTools,
     assertive,
     assertthat,
-    extRemes
-License: What license is it under?
+    evd
+License: file LICENSE
 LazyData: true
 Suggests:
     knitr,
     rmarkdown,
-    testthat
+    testthat,
+    data.table,
+    ggplot2
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
