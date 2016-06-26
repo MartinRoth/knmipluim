@@ -7,16 +7,16 @@ Depends:
     R (>= 3.3.0)
 Imports:
     caTools,
+    data.table,
     assertive,
     assertthat,
-    evd
+    evd,
+    ggplot2
 License: file LICENSE
 LazyData: true
 Suggests:
     knitr,
     rmarkdown,
-    testthat,
-    data.table,
-    ggplot2
+    testthat
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1

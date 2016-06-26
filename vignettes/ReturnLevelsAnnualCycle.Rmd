@@ -13,6 +13,7 @@ vignette: >
 library(data.table)
 library(ggplot2)
 library(knmipluim)
+library(mgcv)
 ```
 
 We want to compute the annual cycle of return levels of maximum (and minimum) daily temperature, using the following approach.
@@ -25,49 +26,20 @@ We want to compute the annual cycle of return levels of maximum (and minimum) da
 6. The return levels are calculated based on these smoothed parameters.
 
 The data:
-```{r, data, echo=FALSE}
-txDat <- fread("http://climexp.knmi.nl/data/bxeca162.dat")
-setnames(txDat, c("year", "month", "day", "tx"))
-setkey(txDat, year, month, day)
-tnDat <- fread("http://climexp.knmi.nl/data/bneca162.dat")
-setnames(tnDat, c("year", "month", "day", "tn"))
-setkey(tnDat, year, month, day)
-data <- merge(txDat, tnDat)
-data <- data[year %in% 1981:2010]
-data[, date := as.Date(paste(year, month, day, sep="-"))]
-knitr::kable(rbind(head(data), tail(data)))
+```{r, data}
+data <- tx260_1981_2010
 ```
 
-```{r, dataVis, echo=FALSE}
-ggplot(data, aes(x = date, y = tx)) + geom_smooth(col = 2, se = FALSE) +
-  geom_smooth(aes(y = tn), col = 4, se = FALSE)
+```{r, computation}
+climatologyRetLevel <- ReturnLevelClimatology(data, "max", kLoc = 10, kScale = 10, kShape = 5)
 ```
 
-```{r, movingExtremes}
-data[, rollMax := GetWindowExtremes(tx, 15L, "max")]
-data[, rollMin := GetWindowExtremes(tn, 15L, "min")]
-knitr::kable(data[1 : 40, ])
+```{r, plots, fig.width=7, fig.height=6}
+
+PlotEstimates(climatologyRetLevel)
 ```
 
-```{r, maximaGevParams}
-fixedShape <- -0.3
-maxGevParams <- data[, GetGevParamsFixedShape(rollMax, fixedShape), by = .(month, day)]
-
-summary(maxGevParams[, .(loc, scale)])
-```
-
-```{r, plotGevParamsMaxima}
-plot(maxGevParams[, scale])
-```
-
-```{r, minimaGevParams}
-fixedShape <- -0.3
-gevParamsMinima <- data[, GetGevParams(-rollMin), by = .(month, day)]
-#gevParamsMinima <- data[, GetGevParamsFixedShape(rollMin, fixedShape), by = .(month, day)]
-knitr::kable(gevParamsMinima[1:40,])
-
-plot(gevParamsMinima[, shape])
-
-summary(gevParamsMinima[, .(loc, scale, shape)])
+```{r, plots2, fig.width=7}
+PlotReturnLevels(climatologyRetLevel)
 ```
 
