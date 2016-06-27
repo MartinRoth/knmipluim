@@ -1,6 +1,5 @@
-#' Get return levels
+# Get return levels
 #' @importFrom evd qgev
-#' @export
 GetReturnLevels <- function(period, loc, scale, shape, type) {
   tmp <- qgev(1 - 1/period, loc, scale, shape)
   if (type == "min") {
@@ -12,12 +11,23 @@ GetReturnLevels <- function(period, loc, scale, shape, type) {
 
 
 #' Climatology of Return Levels
+#'
+#' @param data data (needs date and variable field)
+#' @param var  string variable e.g. tx
+#' @param type string c('max', 'min')
+#' @param windowSize integer
+#' @param returnPeriod vector return period
+#' @param kLoc knots for location (0 is fixed)
+#' @param kScale knots for scale (0 is fixed)
+#' @param kShape knots for shape (0 is fixed)
+#'
 #' @export
 ReturnLevelClimatology <- function(data, var, type,
                                    windowSize = 15L,
                                    returnPeriod = c(2, 5, 10, 25, 50, 100),
                                    kLoc = 10, kScale = 10, kShape = 0L) {
-  tmp <- as.data.table(data)
+  ext <- loc <- shape <- displayDate <- NULL
+  tmp <- copy(data)
   tmp[, displayDate := as.Date(paste(2016, substr(date, 6, 10), sep="-"))]
 
   tmp[, ext := GetWindowExtremes(get(var), windowSize, type)]

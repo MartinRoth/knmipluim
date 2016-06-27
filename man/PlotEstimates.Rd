@@ -6,6 +6,9 @@
 \usage{
 PlotEstimates(x)
 }
+\arguments{
+\item{x}{knmipluim object}
+}
 \description{
 Plot estimates
 }

@@ -11,6 +11,7 @@ Imports:
     assertive,
     assertthat,
     evd,
+    mgcv,
     ggplot2
 License: file LICENSE
 LazyData: true

@@ -4,7 +4,6 @@
 #' @param x numeric vector containing the data
 #'
 #' @importFrom evd fgev
-#' @export
 GetGevParams <- function(x) {
   tmp <- fgev(x, std.err=FALSE, warn.inf = FALSE)
   as.list(tmp$estimate)
@@ -17,7 +16,6 @@ GetGevParams <- function(x) {
 #' @param shape numeric value
 #'
 #' @importFrom evd fgev
-#' @export
 GetGevParamsFixedShape <- function(x, shape) {
   shape <- unique(shape)
   stopifnot(length(shape) == 1)
@@ -26,18 +24,18 @@ GetGevParamsFixedShape <- function(x, shape) {
 }
 
 
-#' Get GEV Shape Parameter
+# Get GEV Shape Parameter
 #' @importFrom evd fgev
 GetGevShape <- function(x) {
   tmp <- fgev(x, std.err=FALSE, warn.inf = FALSE)
   as.list(tmp$estimate[3])
 }
 
-#' Determine GEV Shape Parameter
+# Determine GEV Shape Parameter
 #' @import data.table
 #' @import mgcv
-#' @export
 DetermineShape <- function(data, k = 0L) {
+  ext <- shape <- displayDate <- oldShape <- NULL
   tmp <- data[, GetGevShape(ext), by = displayDate]
   tmp[, oldShape := shape]
   if (k == 0L) {
@@ -48,9 +46,9 @@ DetermineShape <- function(data, k = 0L) {
   merge(data, tmp, by = "displayDate")
 }
 
-#' Determine GEV Location and Scale
-#' @export
+# Determine GEV Location and Scale
 DetermineLocationAndScale <- function(data, kLoc = 4L, kScale = 4L) {
+  ext <- shape <- displayDate <- oldLoc <- oldScale <- oldShape <- loc <- NULL
   tmp <- data[, GetGevParamsFixedShape(ext, shape), by = displayDate]
   tmp[, oldLoc := loc]
   tmp[, oldScale := scale]

@@ -8,6 +8,23 @@ ReturnLevelClimatology(data, var, type, windowSize = 15L,
   returnPeriod = c(2, 5, 10, 25, 50, 100), kLoc = 10, kScale = 10,
   kShape = 0L)
 }
+\arguments{
+\item{data}{data (needs date and variable field)}
+
+\item{var}{string variable e.g. tx}
+
+\item{type}{string c('max', 'min')}
+
+\item{windowSize}{integer}
+
+\item{returnPeriod}{vector return period}
+
+\item{kLoc}{knots for location (0 is fixed)}
+
+\item{kScale}{knots for scale (0 is fixed)}
+
+\item{kShape}{knots for shape (0 is fixed)}
+}
 \description{
 Climatology of Return Levels
 }

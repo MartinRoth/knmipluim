@@ -1,7 +1,19 @@
-#' Reference data
-"tx260_1981_2010"
-"tx260_GL_2050"
-"tx260_WH_2050"
-"tn260_1981_2010"
-"tn260_GL_2050"
-"tn260_WH_2050"
+#' Reference maximum data
+#' @format A data frame with 3 variables:
+#' \describe{
+#'   \item{name}{Scenario}
+#'   \item{date}{date}
+#'   \item{tx}{Daily maximum temperature}
+#' }
+#' @source KNMI
+"txDat"
+
+#' Reference minimum data
+#' @format A data frame with 3 variables:
+#' \describe{
+#'   \item{name}{Scenario}
+#'   \item{date}{date}
+#'   \item{tn}{Daily minimum temperature}
+#' }
+#' @source KNMI
+"tnDat"

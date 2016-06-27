@@ -27,7 +27,8 @@ We want to compute the annual cycle of return levels of maximum (and minimum) da
 
 For the maxima at De Bilt this looks like:
 ```{r, maxDat}
-maxDat <- tx260_1981_2010
+maxDat <- txDat[name == "tx260_1981_2010"]
+maxDat[, name := NULL]
 maxRetLevel <- ReturnLevelClimatology(maxDat, "tx", "max", kLoc = 15, kScale = 8, kShape = 4)
 ```
 
@@ -42,7 +43,8 @@ PlotReturnLevels(maxRetLevel)
 
 And for the minima it looks like:
 ```{r, minDat}
-minDat <- tn260_1981_2010
+minDat <- tnDat[name == "tn260_1981_2010"]
+minDat[, name := NULL]
 minRetLevel <- ReturnLevelClimatology(minDat, "tn", "min", kLoc = 15, kScale = 8, kShape = 4)
 ```
 

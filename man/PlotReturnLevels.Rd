@@ -6,6 +6,9 @@
 \usage{
 PlotReturnLevels(x)
 }
+\arguments{
+\item{x}{knmipluim object}
+}
 \description{
 Plot return levels
 }
