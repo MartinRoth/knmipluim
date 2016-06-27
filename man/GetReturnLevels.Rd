@@ -4,7 +4,7 @@
 \alias{GetReturnLevels}
 \title{Get return levels}
 \usage{
-GetReturnLevels(period, loc, scale, shape)
+GetReturnLevels(period, loc, scale, shape, type)
 }
 \description{
 Get return levels

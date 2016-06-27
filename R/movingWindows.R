@@ -17,7 +17,7 @@ GetWindowExtremes <- function(x, k, type = c('max', 'min')) {
   windowSize <- k + 1 + k
   switch (type,
     max = return(runmax(x, windowSize)),
-    min = return(runmin(x, windowSize))
+    min = return(-runmin(x, windowSize))
   )
   stop(paste("Method", type, "not defined."))
 }

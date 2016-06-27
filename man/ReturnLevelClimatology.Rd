@@ -4,8 +4,9 @@
 \alias{ReturnLevelClimatology}
 \title{Climatology of Return Levels}
 \usage{
-ReturnLevelClimatology(data, type, windowSize = 15L, returnPeriod = c(2, 5,
-  10, 25, 50, 100), kLoc = 10, kScale = 10, kShape = 0L)
+ReturnLevelClimatology(data, var, type, windowSize = 15L,
+  returnPeriod = c(2, 5, 10, 25, 50, 100), kLoc = 10, kScale = 10,
+  kShape = 0L)
 }
 \description{
 Climatology of Return Levels

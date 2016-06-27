@@ -25,21 +25,32 @@ We want to compute the annual cycle of return levels of maximum (and minimum) da
 5. The GEV parameters are smoothed over the year (in a cyclic way)
 6. The return levels are calculated based on these smoothed parameters.
 
-The data:
-```{r, data}
-data <- tx260_1981_2010
+For the maxima at De Bilt this looks like:
+```{r, maxDat}
+maxDat <- tx260_1981_2010
+maxRetLevel <- ReturnLevelClimatology(maxDat, "tx", "max", kLoc = 15, kScale = 8, kShape = 4)
 ```
 
-```{r, computation}
-climatologyRetLevel <- ReturnLevelClimatology(data, "max", kLoc = 10, kScale = 10, kShape = 5)
+
+```{r, maxEstimates, echo=FALSE, fig.width=7, fig.height=6}
+PlotEstimates(maxRetLevel)
 ```
 
-```{r, plots, fig.width=7, fig.height=6}
-
-PlotEstimates(climatologyRetLevel)
+```{r, maxRetLevel, echo=FALSE, fig.width=7}
+PlotReturnLevels(maxRetLevel)
 ```
 
-```{r, plots2, fig.width=7}
-PlotReturnLevels(climatologyRetLevel)
+And for the minima it looks like:
+```{r, minDat}
+minDat <- tn260_1981_2010
+minRetLevel <- ReturnLevelClimatology(minDat, "tn", "min", kLoc = 15, kScale = 8, kShape = 4)
+```
+
+```{r, minEstimates, echo=FALSE, fig.width=7, fig.height=6}
+PlotEstimates(minRetLevel)
+```
+
+```{r, minRetLevel, echo=FALSE, fig.width=7}
+PlotReturnLevels(minRetLevel)
 ```
 

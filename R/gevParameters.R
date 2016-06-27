@@ -35,7 +35,7 @@ GetGevShape <- function(x) {
 
 #' Determine GEV Shape Parameter
 #' @import data.table
-#' @importFrom mgcv gam
+#' @import mgcv
 #' @export
 DetermineShape <- function(data, k = 0L) {
   tmp <- data[, GetGevShape(ext), by = displayDate]

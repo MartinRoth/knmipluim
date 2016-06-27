@@ -11,5 +11,5 @@ test_that("Moving window extremes", {
   expect_error(GetWindowExtremes(x, 2L, "mean"), "Method mean not defined.")
   expect_error(GetWindowExtremes(x, 2L, "sqrt"), "Method sqrt not defined.")
   expect_equal(GetWindowExtremes(x, 2L, "max"), c(rep(3, 2), rep(5, 4), rep(8, 3)))
-  expect_equal(GetWindowExtremes(x, 2L, "min"), c(rep(1, 3), rep(0, 5), 2))
+  expect_equal(GetWindowExtremes(x, 2L, "min"), -c(rep(1, 3), rep(0, 5), 2))
 })
