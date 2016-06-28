@@ -18,17 +18,21 @@ library(mgcv)
 
 We want to compute the annual cycle of return levels of maximum (and minimum) daily temperature, using the following approach.
 
-1. We specify for each day of the year a window size, e.g. 15 days.
+1. We specify for each day of the year a centered window, eg. 15 days prior and after.
 2. For each of these windows we determine the maximum value, which is then related to that calendar day.
 3. With this we obtain for each day one maximum value per year of observations.
-4. From these maxima we compute the GEV parameters.
-5. The GEV parameters are smoothed over the year (in a cyclic way)
+4. From these maxima we compute the GEV parameters by the following procedure:
+  + We estimate the GEV shape parameter for each calendar day
+  + We smooth the shape parameter (preserving cyclicity)
+  + With the derived shape parameter we estimate location and scale parameter
+  + We smooth these parameters as well (preserving cyclicity)
 6. The return levels are calculated based on these smoothed parameters.
 
 For the maxima at De Bilt this looks like:
 ```{r, maxDat}
 maxDat <- txDat[name == "tx260_1981_2010"]
-maxDat[, name := NULL]
+#maxDat <- txDat[name == "tx260_WH_2050"]
+#maxDat[, name := NULL]
 maxRetLevel <- ReturnLevelClimatology(maxDat, "tx", "max", kLoc = 15, kScale = 8, kShape = 4)
 ```
 
@@ -44,7 +48,8 @@ PlotReturnLevels(maxRetLevel)
 And for the minima it looks like:
 ```{r, minDat}
 minDat <- tnDat[name == "tn260_1981_2010"]
-minDat[, name := NULL]
+#minDat <- tnDat[name == "tn260_WH_2050"]
+#minDat[, name := NULL]
 minRetLevel <- ReturnLevelClimatology(minDat, "tn", "min", kLoc = 15, kScale = 8, kShape = 4)
 ```
 
