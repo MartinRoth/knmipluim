@@ -9,7 +9,8 @@ PlotEstimates <- function(x) {
   setnames(oldValues, names(values))
   values <- melt(values, id.vars = "displayDate", variable.name = "parameter")
   oldValues <- melt(oldValues, id.vars = "displayDate", variable.name = "parameter")
-  ggplot(oldValues[displayDate != "2016-02-29"], aes(x = displayDate, y = value)) + geom_point() +
+  ggplot(oldValues[displayDate != "2016-02-29"], aes(x = displayDate, y = value)) +
+    geom_point() +
     geom_line(col=2, data = values[displayDate != "2016-02-29"]) +
     facet_wrap(~parameter, scales="free_y", nrow=3) +
     scale_x_date(date_labels = "%b %d") +
@@ -22,7 +23,9 @@ PlotEstimates <- function(x) {
 #' @export
 PlotReturnLevels <- function(x) {
   displayDate <- value <- returnPeriod <- NULL
-  ggplot(x$returnLevels, aes(x = displayDate, y = value, col = returnPeriod)) + geom_line() +
+  ggplot(x$returnLevels, aes(x = displayDate, y = value, col = returnPeriod)) +
+    geom_line() +
+    geom_point(aes(y = extObs, col = NULL), data = x$extremes) +
     scale_x_date(date_labels = "%b %d") +
     xlab("Day of the year")
 }
