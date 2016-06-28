@@ -22,7 +22,7 @@ PlotEstimates <- function(x) {
 #' @import ggplot2
 #' @export
 PlotReturnLevels <- function(x) {
-  displayDate <- value <- returnPeriod <- NULL
+  displayDate <- value <- returnPeriod <- extObs <- NULL
   ggplot(x$returnLevels, aes(x = displayDate, y = value, col = returnPeriod)) +
     geom_line() +
     geom_point(aes(y = extObs, col = NULL), data = x$extremes) +
