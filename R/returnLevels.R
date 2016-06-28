@@ -47,7 +47,7 @@ ReturnLevelClimatology <- function(data, var, type,
   returnLevels <- estimates[,  as.list(GetReturnLevels(returnPeriod, loc, scale, shape, type)), by = displayDate]
   returnLevels <- melt(returnLevels, id.vars = "displayDate", variable.name = "returnPeriod")
 
-  list(type = type, data = data, windowSize = windowSize,
+  list(type = type, var = var, data = data, windowSize = windowSize,
        estimates = estimates, returnLevels = returnLevels,
        extremes = extremeObservations)
 }

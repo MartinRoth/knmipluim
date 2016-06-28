@@ -27,5 +27,6 @@ PlotReturnLevels <- function(x) {
     geom_line() +
     geom_point(aes(y = extObs, col = NULL), data = x$extremes) +
     scale_x_date(date_labels = "%b %d") +
-    xlab("Day of the year")
+    xlab("Day of the year") + ylab(x$var) +
+    guides(col=guide_legend(title="return period"))
 }
