@@ -30,7 +30,15 @@ ReturnLevelClimatology <- function(data, var, type,
   tmp <- copy(data)
   tmp[, displayDate := as.Date(paste(2016, substr(date, 6, 10), sep="-"))]
 
+
   tmp[, ext := GetWindowExtremes(get(var), windowSize, type)]
+
+  if (type == "max") {
+    extremeObservations <- tmp[, max(get(var)), by = displayDate]
+  } else {
+    extremeObservations <- tmp[, min(get(var)), by = displayDate]
+  }
+  setnames(extremeObservations, 2, "extObs")
 
   tmp <- DetermineShape(tmp, kShape)
 
@@ -39,5 +47,7 @@ ReturnLevelClimatology <- function(data, var, type,
   returnLevels <- estimates[,  as.list(GetReturnLevels(returnPeriod, loc, scale, shape, type)), by = displayDate]
   returnLevels <- melt(returnLevels, id.vars = "displayDate", variable.name = "returnPeriod")
 
-  list(type = type, data = data, windowSize = windowSize, estimates = estimates, returnLevels = returnLevels)
+  list(type = type, data = data, windowSize = windowSize,
+       estimates = estimates, returnLevels = returnLevels,
+       extremes = extremeObservations)
 }
