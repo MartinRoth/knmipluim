@@ -12,6 +12,6 @@ test_that("Regression test", {
   minDat <- tnDat[name == "tn260_1981_2010"]
   minDat[, name := NULL]
   minRetLevel <- ReturnLevelClimatology(minDat, "tn", "min", kLoc = 15, kScale = 8, kShape = 4)
-  expect_equal_to_reference(maxRetLevel, "ReturnLevelMaxima.rds")
-  expect_equal_to_reference(minRetLevel, "ReturnLevelMinima.rds")
+  expect_equal_to_reference(maxRetLevel, "ReturnLevelMaximaLMom.rds")
+  expect_equal_to_reference(minRetLevel, "ReturnLevelMinimaLMom.rds")
 })

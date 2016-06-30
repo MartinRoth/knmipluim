@@ -25,9 +25,9 @@ windowSize <- 20L
 2. For each of these windows we determine the maximum value, which is then related to that calendar day.
 3. With this we obtain for each day one maximum value per year of observations.
 4. From these maxima we compute the GEV parameters by the following procedure:
-  + We estimate the GEV shape parameter for each calendar day
+  + We estimate the GEV shape parameter for each calendar day (L-Moments)
   + We smooth the shape parameter (preserving cyclicity)
-  + With the derived shape parameter we estimate location and scale parameter
+  + With the derived shape parameter we estimate location and scale parameter (MLE)
   + We smooth these parameters as well (preserving cyclicity)
 6. The return levels are calculated based on these smoothed parameters.
 

@@ -25,10 +25,18 @@ GetGevParamsFixedShape <- function(x, shape) {
 
 
 # Get GEV Shape Parameter
+#' @importFrom extRemes fevd
 #' @importFrom evd fgev
-GetGevShape <- function(x) {
-  tmp <- fgev(x, std.err=FALSE, warn.inf = FALSE)
-  as.list(tmp$estimate[3])
+GetGevShape <- function(x, method="Lmoments") {
+  if (method=="MLE") {
+    tmp <- fgev(x, std.err=FALSE, warn.inf = FALSE)
+    return(as.list(tmp$estimate[3]))
+  } else if (method == "Lmoments") {
+    tmp <- fevd(x, type="GEV", method="Lmoments")
+    return(as.list(tmp$results[3]))
+  } else {
+    stop(paste("Method", method, "not implemented."))
+  }
 }
 
 # Determine GEV Shape Parameter
