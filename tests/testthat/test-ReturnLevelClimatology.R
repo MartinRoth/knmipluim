@@ -5,6 +5,10 @@ library(knmipluim)
 ## TODO: Rename context
 ## TODO: Add more tests
 
+test_that("Validate input", {
+  expect_error(GetGevShape(c(1,2,3), "PWM"), "Method PWM not implemented.")
+})
+
 test_that("Regression test", {
   maxDat <- txDat[name == "tx260_1981_2010"]
   maxDat[, name := NULL]

@@ -1,13 +1,3 @@
-#' Calculate GEV Parameters
-#'
-#' @description Calculate GEV parameters using MLE
-#' @param x numeric vector containing the data
-#'
-#' @importFrom evd fgev
-GetGevParams <- function(x) {
-  tmp <- fgev(x, std.err=FALSE, warn.inf = FALSE)
-  as.list(tmp$estimate)
-}
 
 #' Calculate GEV Parameters (Fixed Shape)
 #'
