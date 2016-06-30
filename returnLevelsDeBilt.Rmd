@@ -1,0 +1,66 @@
+---
+title: "Return Levels for De Bilt"
+author: "Martin Roth"
+date: "June 30, 2016"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+```{r Library, echo=FALSE}
+library(foreach)
+library(iterators)
+library(data.table)
+library(ggplot2)
+library(knmipluim)
+```
+
+```{r maxComputations}
+scenarios <- txDat[, unique(name)]
+windowSize <- 20L
+
+maxResult <- foreach(scenario = iter(scenarios), .combine = "rbind") %do% {
+  maxDat <- txDat[name == scenario]
+  tmp <- ReturnLevelClimatology(maxDat, "tx", "max",
+                                windowSize = windowSize,
+                                kLoc = 15, kScale = 8, kShape = 4)
+  p <- PlotReturnLevels(tmp)
+  print(p + ggtitle(paste(scenario)))
+  tmp <- tmp$returnLevels
+  tmp[, name := scenario]
+}
+
+setcolorder(maxResult , c("name", "returnPeriod", "displayDate", "value"))
+setkey(maxResult, name, returnPeriod, displayDate)
+
+```
+
+```{r minComputations}
+scenarios <- tnDat[, unique(name)]
+windowSize <- 20L
+
+minResult <- foreach(scenario = iter(scenarios), .combine = "rbind") %do% {
+  minDat <- tnDat[name == scenario]
+  tmp <- ReturnLevelClimatology(minDat, "tn", "min",
+                                windowSize = windowSize,
+                                kLoc = 15, kScale = 8, kShape = 4)
+  p <- PlotReturnLevels(tmp)
+  print(p + ggtitle(paste(scenario)))
+  tmp <- tmp$returnLevels
+  tmp[, name := scenario]
+}
+
+setcolorder(minResult , c("name", "returnPeriod", "displayDate", "value"))
+setkey(minResult, name, returnPeriod, displayDate)
+
+```
+
+
+```{r combineResults}
+write.csv(rbind(maxResult, minResult), file = "returnLevelsDeBilt.csv", row.names=FALSE)
+```
+
+
