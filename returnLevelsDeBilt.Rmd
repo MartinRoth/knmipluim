@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## KNMI pluim
 ```{r Library, echo=FALSE}
 library(foreach)
 library(iterators)
@@ -18,49 +18,77 @@ library(ggplot2)
 library(knmipluim)
 ```
 
-```{r maxComputations}
-scenarios <- txDat[, unique(name)]
+The calculation for the current version of KNMI pluim climate information was
+done using the knmipluim package (version `r packageVersion("knmipluim")`).
+```{r LoadData}
 windowSize <- 20L
+inputPath <- system.file("OfficialData", package="knmipluim")
+outputPath <- "./inst/OfficialOutput"
+txFiles <- c("KNMI14____ref_tx___19810101-20101231_v3.2.txt",
+             "KNMI14_GL_2050_tx___19810101-20101231_v3.2.txt",
+             "KNMI14_WH_2050_tx___19810101-20101231_v3.2.txt")
+tnFiles <- c("KNMI14____ref_tn___19810101-20101231_v3.2.txt",
+             "KNMI14_GL_2050_tn___19810101-20101231_v3.2.txt",
+             "KNMI14_WH_2050_tn___19810101-20101231_v3.2.txt")
+```
 
-maxResult <- foreach(scenario = iter(scenarios), .combine = "rbind") %do% {
-  maxDat <- txDat[name == scenario]
-  tmp <- ReturnLevelClimatology(maxDat, "tx", "max",
+
+```{r MaxComp}
+result <- foreach(f = iter(txFiles)) %do% {
+  tmp <- fread(paste0(inputPath, "/", f))
+  setnames(tmp, c("date", unlist(tmp[1, -1, with=FALSE])))
+  tmp <- tmp[date != 0]
+  tmp[, date := as.Date(paste(date), format = "%Y%m%d")]
+  baseName <- strsplit(f, ".txt")[[1]]
+  tmp <- melt(tmp, id.vars = "date", variable.name = "station", value.name = "tx")
+  tmp[, station := as.character(station)]
+
+  tmpStation <- foreach(s = iter(unique(tmp[, station]))) %do% {
+    maxDat <- tmp[station == s]
+    retClim <- ReturnLevelClimatology(maxDat, "tx", "max",
                                 windowSize = windowSize,
                                 kLoc = 15, kScale = 8, kShape = 4)
-  p <- PlotReturnLevels(tmp)
-  print(p + ggtitle(paste(scenario)))
-  tmp <- tmp$returnLevels
-  tmp[, name := scenario]
+    if (s == "260") {
+      p <- PlotReturnLevels(retClim)
+      print(p + ggtitle(paste(baseName, "at De Bilt")))
+    }
+    retClim <- retClim$returnLevels
+    retClim[, baseName := baseName]
+    retClim[, station := s]
+    write.csv(retClim, file = paste0(outputPath, "/tx_retLevel", baseName,"_", s, ".csv"), row.names = FALSE)
+  } 
+  return(tmpStation)
 }
-
-setcolorder(maxResult , c("name", "returnPeriod", "displayDate", "value"))
-setkey(maxResult, name, returnPeriod, displayDate)
-
 ```
 
-```{r minComputations}
-scenarios <- tnDat[, unique(name)]
-windowSize <- 20L
+```{r minComp}
+result <- foreach(f = iter(tnFiles)) %do% {
+  tmp <- fread(paste0(inputPath, "/", f))
+  setnames(tmp, c("date", unlist(tmp[1, -1, with=FALSE])))
+  tmp <- tmp[date != 0]
+  tmp[, date := as.Date(paste(date), format = "%Y%m%d")]
+  baseName <- strsplit(f, ".txt")[[1]]
+  tmp <- melt(tmp, id.vars = "date", variable.name = "station", value.name = "tn")
+  tmp[, station := as.character(station)]
 
-minResult <- foreach(scenario = iter(scenarios), .combine = "rbind") %do% {
-  minDat <- tnDat[name == scenario]
-  tmp <- ReturnLevelClimatology(minDat, "tn", "min",
+  tmpStation <- foreach(s = iter(unique(tmp[, station]))) %do% {
+    minDat <- tmp[station == s]
+    retClim <- ReturnLevelClimatology(minDat, "tn", "min",
                                 windowSize = windowSize,
                                 kLoc = 15, kScale = 8, kShape = 4)
-  p <- PlotReturnLevels(tmp)
-  print(p + ggtitle(paste(scenario)))
-  tmp <- tmp$returnLevels
-  tmp[, name := scenario]
+    if (s == "260") {
+      p <- PlotReturnLevels(retClim)
+      print(p + ggtitle(paste(baseName, "at De Bilt")))
+    }
+    retClim <- retClim$returnLevels
+    retClim[, baseName := baseName]
+    retClim[, station := s]
+    write.csv(retClim, file = paste0(outputPath, "/tn_retLevel", baseName,"_", s, ".csv"), row.names = FALSE)
+  } 
+  return(tmpStation)
 }
 
-setcolorder(minResult , c("name", "returnPeriod", "displayDate", "value"))
-setkey(minResult, name, returnPeriod, displayDate)
-
 ```
 
-
-```{r combineResults}
-write.csv(rbind(maxResult, minResult), file = "returnLevelsDeBilt.csv", row.names=FALSE)
-```
 
 
