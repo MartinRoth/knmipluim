@@ -1,6 +1,6 @@
 Package: knmipluim
 Title: Return Levels for KNMI pluim
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Authors@R: person("Martin", "Roth", email = "roth@knmi.nl", role = c("aut", "cre"))
 Description: Compute moving return levels representing the annual cycle.
 Depends:
